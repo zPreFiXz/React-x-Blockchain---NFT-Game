@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import Layout from "../Layouts/layout";
 import Login from "../pages/Login";
 import Region from "../pages/Region";
@@ -12,7 +12,7 @@ const AppRoutes = () => {
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Navigate to="login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/region" element={<Region />} />
           <Route path="/factory" element={<Factory />} />
