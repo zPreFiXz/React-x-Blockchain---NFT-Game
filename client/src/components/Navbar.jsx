@@ -1,7 +1,7 @@
 const Navbar = () => {
   return (
     <>
-      <div className="w-[1922px] h-[65px] bg-[#1d2731]"></div>
+      <div className="fixed w-full h-[65px] bg-[#1d2731]"></div>
     </>
   );
 };

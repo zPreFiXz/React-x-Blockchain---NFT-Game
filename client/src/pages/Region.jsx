@@ -1,6 +1,6 @@
-const Region = () => {
+const Regions = () => {
   return (
-    <div>Region</div>
+    <div>Regions</div>
   )
 }
-export default Region
+export default Regions
