@@ -16,9 +16,9 @@ const AppRoutes = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/region" element={<Region />} />
           <Route path="/factory" element={<Factory />} />
-          <Route path="/Dashboard" element={<Dashboard />} />
-          <Route path="/Building" element={<Building />} />
-          <Route path="/Ranking" element={<Ranking />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/building" element={<Building />} />
+          <Route path="/ranking" element={<Ranking />} />
         </Route>
       </Routes>
     </BrowserRouter>
