@@ -2,13 +2,16 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { PeerServer } = require("peer");
 const Blockchain = require("./blockchain");
+const Player = require("./player");
 const http = require("http");
 const socketIo = require("socket.io");
+const cors = require("cors");
 
 const app = express();
 const PORT = 3000;
 
 app.use(bodyParser.json());
+app.use(cors());
 
 // Socker.io
 const server = http.createServer(app);
@@ -23,6 +26,8 @@ const io = socketIo(server, {
 let peerList = [];
 let latestMessage = "";
 let receivedTime = "";
+
+const players = [];
 
 const peerConnections = new Map();
 const peerServer = PeerServer({ port: 9000, path: "/peerjs" });
@@ -41,6 +46,15 @@ peerServer.on("connection", (client) => {
       latestMessage,
     });
   }, 100);
+
+  let player = players.find((player) => player.id === `${client.id}`);
+
+  if (!player) {
+    player = new Player({ 
+      id: client.id});
+    players.push(player);
+  }
+
 });
 
 peerServer.on("disconnect", (client) => {
@@ -133,3 +147,18 @@ server.listen(PORT, () => {
 });
 
 console.log("PeerJS Server is running on http://localhost:9000/peerjs");
+
+//test api players
+app.get("/account/:id",  (req, res) => {
+  const playerId = req.params.id
+
+  let player = players.find((player) => player.id === `${playerId}`);
+
+  res.json(player);
+});
+
+app.get("/players", (req, res) => {
+  res.json(players)
+});
+
+
