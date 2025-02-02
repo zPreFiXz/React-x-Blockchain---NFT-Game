@@ -5,7 +5,7 @@ const Navbar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="w-full bg-[#1d2731] text-white relative p-2">
+    <div className="z-10 fixed w-full bg-[#1d2731] text-white p-2">
       {/* Navbar Section */}
       <div className="h-[50px] flex items-center justify-between">
         {/* Left Section */}
