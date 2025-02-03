@@ -6,6 +6,7 @@ const Player = require("./player");
 const http = require("http");
 const socketIo = require("socket.io");
 const cors = require("cors");
+const { v4: uuidv4 } = require("uuid");
 
 const app = express();
 const PORT = 3000;
@@ -162,3 +163,170 @@ app.get("/players", (req, res) => {
 });
 
 
+let grovermentMarket = [
+  {
+    resource: 'wood',
+    amount: 1,
+    price: 100,
+  },
+  {
+    resource: 'cement',
+    amount: 1,
+    price: 300,
+  },
+  {
+    resource: 'iron',
+    amount: 1,
+    price: 500,
+  },
+  {
+    resource: 'timber',
+    amount: 1,
+    price: 75,
+  },
+  {
+    resource: 'bigStone',
+    amount: 1,
+    price: 100,
+  },
+  {
+    resource: 'crudeCoal',
+    amount: 1,
+    price: 150,
+  },
+  {
+    resource: 'crudeOil',
+    amount: 1,
+    price: 200,
+  }
+]
+
+app.get("/grovermentMarket", (req, res) => {
+  res.json(grovermentMarket);
+});
+
+app.post("/buySellGroverment", (req, res) => {
+  // const type = 'buy';
+  // const playerId = 'f9dd162d-5bf1-4cf1-88fc-25d0393a93f7';
+  // const resource = 'wood';
+  // const amount = 100;
+  // const price = 1000;
+
+  const { type, playerId, resource, amount, price } = req.query;
+
+  let player = players.find((p) => p.id === playerId);
+
+  if (!player) {
+    return res.status(404).json({ success: false, message: "player not found!" });
+  }
+
+  const result = player.buySellGroverment( type, resource, Number(amount), Number(price));
+  res.json(result);
+});
+
+
+
+let privateMarket = [
+  {
+    id: 1,
+  },
+  {
+    id: 3,
+  }
+];
+
+app.get("/privateMarket", (req, res) => {
+  res.json(privateMarket);
+});
+
+app.post("/setOrder", (req, res) => {
+  const type = 'buy';
+  const from = 'f9dd162d-5bf1-4cf1-88fc-25d0393a93f7';
+  const resource = 'wood';
+  const amount = 100;
+  const price = 1000;
+  
+  // const { type, from, resource, amount, price } = req.body;
+
+  if (!type || !from || !resource || !amount || !price) {
+    return res.status(400).json({ success: false, message: "Incomplete information" });
+  }
+
+  const fromPlayer = players.find((player) => player.id === from);
+  
+  if(!fromPlayer) {
+    return res.status(404).json({ success: false, message: "player not found!"});
+  }
+
+  const result = fromPlayer.setOrder(type, resource, Number(amount), Number(price));
+
+  const order = {
+    id: uuidv4(),
+    type,        
+    from,        
+    resource,    
+    amount,      
+    price,      
+  };
+
+  privateMarket.push(order);
+  res.json({ success: true, message: "ตั้งคำสั่งสำเร็จ!", result });
+});
+
+app.post("/cancelOrder", (req, res) => {
+  // const id = 123;
+  // const from = "f9dd162d-5bf1-4cf1-88fc-25d0393a93f7";
+
+  const { id, from } = req.body;
+
+  if(!id || !from) {
+    return res.status(400).json({ success: false, message: "Incomplete information!"});
+  }
+
+  const orderIndex = privateMarket.findIndex((order) => order.id == id);
+  const order = privateMarket.find((order) => order.id == id);
+
+  if(orderIndex === -1) {
+    return res.status(404).json({ success: false, message: "ID Order not found!"});
+  }
+
+  const fromPlayer = players.find((player) => player.id == from);
+  
+  if(!fromPlayer) {
+    return res.status(404).json({ success: false, message: "From player not found!"})
+  }
+
+  const result = fromPlayer.cancelOrder(order.type, order.resource, Number(order.amount), Number(order.price));
+
+  privateMarket.splice(orderIndex, 1)
+
+  res.json({ success: true, message: "cancel successfuly!", result });
+  
+})
+
+// app.post("/buySellPrivate", (req, res) => {
+//   const { id, type, form, resource, amount, price } = req.body;
+  
+//   if (!type || !id || !from || !resource || !amount || !price) {
+//     return res.status(400).json({ success: false, message: "Incomplete information" });
+//   }
+
+//   let fromPlayer = players.find((player) => player.id === form);
+
+//   if (!fromPlayer) {
+//     return res.status(404).json({ success: false, message: "player not found!" });
+//   }
+
+//   const orderIndex = privateMarket.findIndex((order) => order.id === id);
+
+//   if (orderIndex === -1) {
+//     return res.status(404).json({ success: false, message: "Order not found!" });
+//   }
+
+//   const result = fromPlayer.buysellPrivate(type, from, resource, Number(amount) ,Number(price));
+  
+//   privateMarket.splice(orderIndex, 1);
+  
+//   res.json(result);
+  
+// })
