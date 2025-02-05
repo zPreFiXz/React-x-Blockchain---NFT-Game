@@ -4,7 +4,6 @@ import Login from "../pages/Login";
 import Region from "../pages/Region";
 import Factory from "../pages/Factory";
 import Dashboard from "../pages/Dashboard";
-import Building from "../pages/Building";
 import Ranking from "../pages/Ranking";
 
 const AppRoutes = () => {
@@ -17,7 +16,6 @@ const AppRoutes = () => {
           <Route path="/region" element={<Region />} />
           <Route path="/factory" element={<Factory />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/building" element={<Building />} />
           <Route path="/ranking" element={<Ranking />} />
         </Route>
       </Routes>

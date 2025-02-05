@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 const PeerContext = createContext();
 
 // Socket.io
-const socket = io("http://localhost:3000");
+const socket = io("localhost:3000");
 
 export const PeerProvider = ({ children }) => {
   const [peerId, setPeerId] = useState(localStorage.getItem("peerId") || null);

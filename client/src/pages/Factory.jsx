@@ -1,11 +1,11 @@
 import { Link } from "react-router";
 import './Factory.css';
-import Electic from "../assets/images/Electic.jpg";
-import gold from "../assets/images/gold.jpg";
-import oil from "../assets/images/oil.jpg";
-import rock from "../assets/images/rock.jpg";
-import woods from "../assets/images/woods.jpg";
-import NPC from "../assets/images/NPC.png";
+import Electic from "../assets/Electic.jpg";
+import gold from "../assets/gold.jpg";
+import oil from "../assets/oil.jpg";
+import rock from "../assets/rock.jpg";
+import woods from "../assets/woods.jpg";
+import NPC from "../assets/NPC.png";
 
 const Factory = () => {
   return (

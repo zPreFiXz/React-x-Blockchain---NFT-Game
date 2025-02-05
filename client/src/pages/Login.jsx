@@ -1,6 +1,6 @@
 import { Link } from "react-router";
-import loginBackground from "../assets/images/loginBackground.png";
-import crown from "../assets/images/crown.png";
+import loginBackground from "../assets/loginBackground.png";
+import crown from "../assets/crown.png";
 
 function Login() {
   return (
@@ -11,7 +11,7 @@ function Login() {
         <p className="mt-[17.54px] text-black text-[45.76px] font-bold">
           KING OF ECONOMY
         </p>
-        <Link to="/dashboard">
+        <Link to="/region">
           <button className="flex justify-center items-center w-[433.22px] h-[78.56px] gap-[28.22px] px-[28.98px] py-[6.1px] mt-[54.07px] mb-[69.53px] rounded-[38.14px] bg-[#235789] cursor-pointer">
             <svg
               width={34}
