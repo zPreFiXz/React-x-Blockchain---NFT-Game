@@ -120,7 +120,7 @@ const Regions = () => {
         )}
         {/* ปุ่ม Next */}
         <Link
-          to="/factory"
+          to="/dashboard"
           className="bottom-4 right-4 left-4 flex justify-center mt-[50px]"
         >
           <button className="bg-blue-500 text-white px-8 py-3 rounded-full shadow-md hover:bg-blue-600 transition-all duration-300 cursor-pointer">

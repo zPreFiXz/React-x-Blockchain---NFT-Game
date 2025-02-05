@@ -79,10 +79,6 @@ class Player {
         return { success: false, message: "Invalid transaction type", player: this };
     }
     
-   
-
-   
-
     addLand(landItem) {
         this.land.push(landItem);
     }
