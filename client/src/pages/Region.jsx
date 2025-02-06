@@ -14,6 +14,28 @@ const Regions = () => {
     setSelectedRegion(regionName);
   };
 
+  const handleSelectRegion = async (regionName) => {
+    try {
+      const res = await fetch("http://localhost:3000/selecteRegion", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          playerId: localStorage.getItem("peerId"),
+          region: regionName,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <div className="relative w-full h-screen flex justify-center items-center">
       <img
@@ -122,10 +144,15 @@ const Regions = () => {
         <Link
           to="/dashboard"
           className="bottom-4 right-4 left-4 flex justify-center mt-[50px]"
+          onClick={() => handleSelectRegion(selectedRegion)}
         >
-          <button className="bg-blue-500 text-white px-8 py-3 rounded-full shadow-md hover:bg-blue-600 transition-all duration-300 cursor-pointer">
-            Next
-          </button>
+          {selectedRegion ? (
+            <button className="bg-blue-500 text-white px-8 py-3 rounded-full shadow-md hover:bg-blue-600 transition-all duration-300 cursor-pointer">
+              Next
+            </button>
+          ) : (
+            <></>
+          )}
         </Link>
       </div>
     </div>

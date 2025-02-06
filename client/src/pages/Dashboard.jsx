@@ -1,7 +1,30 @@
 import { Link } from "react-router";
 import loginBackground from "../assets/loginBackground.png";
+import { useEffect, useState } from "react";
 
 const Dashboard = () => {
+  const [playerData, setPlayerData] = useState();
+  const [error, setError] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/account/${localStorage.getItem('peerId')}`);  
+        if (!res.ok) {
+          throw new Error('Network response was not ok');  
+        }
+
+        const result = await res.json();  
+        setPlayerData(result);
+
+      } catch (error) {
+        setError(error);
+      }
+    }
+
+    fetchData();
+  }, [])
+
   return (
     <div className=" flex justify-center">
       <img src={loginBackground} className="fixed w-full h-screen" />
@@ -9,7 +32,7 @@ const Dashboard = () => {
         {/* My assets */}
         <div className="w-[833.25px] h-[645px] rounded-[15px] bg-white">
           <p className="mt-[19.5px] ml-[37.5px] text-black text-4xl font-bold">
-            My assets
+            My assets {playerData ? playerData.region : ''}
           </p>
           {/* Factory */}
           <div className="flex items-center mt-[21.75px] ml-[45px]">

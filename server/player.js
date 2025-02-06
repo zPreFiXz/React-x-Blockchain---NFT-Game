@@ -16,7 +16,7 @@ class Player {
         this.oil = data.oil || 100;
         this.gold = data.gold || 200;
 
-        this.land = data.land || [];
+        this.region = data.region || '';
         this.factory = data.factory || [];
     }
 

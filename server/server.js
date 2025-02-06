@@ -51,11 +51,11 @@ peerServer.on("connection", (client) => {
   let player = players.find((player) => player.id === `${client.id}`);
 
   if (!player) {
-    player = new Player({ 
-      id: client.id});
+    player = new Player({
+      id: client.id,
+    });
     players.push(player);
   }
-
 });
 
 peerServer.on("disconnect", (client) => {
@@ -150,8 +150,12 @@ server.listen(PORT, () => {
 console.log("PeerJS Server is running on http://localhost:9000/peerjs");
 
 //test api players
-app.get("/account/:id",  (req, res) => {
-  const playerId = req.params.id
+app.get("/account/:id", (req, res) => {
+  const playerId = req.params.id;
+
+  if(!playerId){
+    return res.status(404).json({ message: "Player not found" });
+  }
 
   let player = players.find((player) => player.id === `${playerId}`);
 
@@ -159,47 +163,64 @@ app.get("/account/:id",  (req, res) => {
 });
 
 app.get("/players", (req, res) => {
-  res.json(players)
+  res.json(players);
 });
 
+app.post("/selecteRegion", (req, res) => {
+  const { playerId, region } = req.body;
+  
+  if (!playerId || !region) {
+    return res.status(400).json({ error: "Missing playerId or region" });
+  }
+
+  let player = players.find((player) => player.id === `${playerId}`);
+
+  if (!player) {
+    console.log("Player not found");
+    return res.status(404).json({ error: "Player not found" });
+
+  }
+
+  player.region = region;
+});
 
 let grovermentMarket = [
   {
-    resource: 'wood',
+    resource: "wood",
     amount: 1,
     price: 100,
   },
   {
-    resource: 'cement',
+    resource: "cement",
     amount: 1,
     price: 300,
   },
   {
-    resource: 'iron',
+    resource: "iron",
     amount: 1,
     price: 500,
   },
   {
-    resource: 'timber',
+    resource: "timber",
     amount: 1,
     price: 75,
   },
   {
-    resource: 'bigStone',
+    resource: "bigStone",
     amount: 1,
     price: 100,
   },
   {
-    resource: 'crudeCoal',
+    resource: "crudeCoal",
     amount: 1,
     price: 150,
   },
   {
-    resource: 'crudeOil',
+    resource: "crudeOil",
     amount: 1,
     price: 200,
-  }
-]
+  },
+];
 
 app.get("/grovermentMarket", (req, res) => {
   res.json(grovermentMarket);
@@ -217,56 +238,63 @@ app.post("/buySellGroverment", (req, res) => {
   let player = players.find((p) => p.id === playerId);
 
   if (!player) {
-    return res.status(404).json({ success: false, message: "player not found!" });
+    return res
+      .status(404)
+      .json({ success: false, message: "player not found!" });
   }
 
-  const result = player.buySellGroverment( type, resource, Number(amount), Number(price));
+  const result = player.buySellGroverment(
+    type,
+    resource,
+    Number(amount),
+    Number(price)
+  );
   res.json(result);
 });
 
-
-
-let privateMarket = [
-  {
-    id: 1,
-  },
-  {
-    id: 3,
-  }
-];
+let privateMarket = [];
 
 app.get("/privateMarket", (req, res) => {
   res.json(privateMarket);
 });
 
-app.post("/setOrder", (req, res) => {
-  const type = 'buy';
-  const from = 'f9dd162d-5bf1-4cf1-88fc-25d0393a93f7';
-  const resource = 'wood';
+app.post("/ ", (req, res) => {
+  const type = "buy";
+  const from = "f9dd162d-5bf1-4cf1-88fc-25d0393a93f7";
+  const resource = "wood";
   const amount = 100;
   const price = 1000;
-  
+
   // const { type, from, resource, amount, price } = req.body;
 
   if (!type || !from || !resource || !amount || !price) {
-    return res.status(400).json({ success: false, message: "Incomplete information" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Incomplete information" });
   }
 
   const fromPlayer = players.find((player) => player.id === from);
-  
-  if(!fromPlayer) {
-    return res.status(404).json({ success: false, message: "player not found!"});
+
+  if (!fromPlayer) {
+    return res
+      .status(404)
+      .json({ success: false, message: "player not found!" });
   }
 
-  const result = fromPlayer.setOrder(type, resource, Number(amount), Number(price));
+  const result = fromPlayer.setOrder(
+    type,
+    resource,
+    Number(amount),
+    Number(price)
+  );
 
   const order = {
     id: uuidv4(),
-    type,        
-    from,        
-    resource,    
-    amount,      
-    price,      
+    type,
+    from,
+    resource,
+    amount,
+    price,
   };
 
   privateMarket.push(order);
@@ -279,34 +307,44 @@ app.post("/cancelOrder", (req, res) => {
 
   const { id, from } = req.body;
 
-  if(!id || !from) {
-    return res.status(400).json({ success: false, message: "Incomplete information!"});
+  if (!id || !from) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Incomplete information!" });
   }
 
   const orderIndex = privateMarket.findIndex((order) => order.id == id);
   const order = privateMarket.find((order) => order.id == id);
 
-  if(orderIndex === -1) {
-    return res.status(404).json({ success: false, message: "ID Order not found!"});
+  if (orderIndex === -1) {
+    return res
+      .status(404)
+      .json({ success: false, message: "ID Order not found!" });
   }
 
   const fromPlayer = players.find((player) => player.id == from);
-  
-  if(!fromPlayer) {
-    return res.status(404).json({ success: false, message: "From player not found!"})
+
+  if (!fromPlayer) {
+    return res
+      .status(404)
+      .json({ success: false, message: "From player not found!" });
   }
 
-  const result = fromPlayer.cancelOrder(order.type, order.resource, Number(order.amount), Number(order.price));
+  const result = fromPlayer.cancelOrder(
+    order.type,
+    order.resource,
+    Number(order.amount),
+    Number(order.price)
+  );
 
-  privateMarket.splice(orderIndex, 1)
+  privateMarket.splice(orderIndex, 1);
 
   res.json({ success: true, message: "cancel successfuly!", result });
-  
-})
+});
 
 // app.post("/buySellPrivate", (req, res) => {
 //   const { id, type, form, resource, amount, price } = req.body;
-  
+
 //   if (!type || !id || !from || !resource || !amount || !price) {
 //     return res.status(400).json({ success: false, message: "Incomplete information" });
 //   }
@@ -324,9 +362,9 @@ app.post("/cancelOrder", (req, res) => {
 //   }
 
 //   const result = fromPlayer.buysellPrivate(type, from, resource, Number(amount) ,Number(price));
-  
+
 //   privateMarket.splice(orderIndex, 1);
-  
+
 //   res.json(result);
-  
+
 // })
