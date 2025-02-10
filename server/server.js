@@ -141,15 +141,13 @@ app.get("/auction", (req, res) => {
   res.json(blockchain.getActiveAuctions());
 });
 
-// Network-facing API
-
 server.listen(PORT, () => {
   console.log(`API running on http://localhost:3000`);
 });
 
 console.log("PeerJS Server is running on http://localhost:9000/peerjs");
 
-//test api players
+// Players API
 app.get("/account/:id", (req, res) => {
   const playerId = req.params.id;
 

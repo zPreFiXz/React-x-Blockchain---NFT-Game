@@ -13,16 +13,20 @@ const Layout = () => {
   const excludePeerRoutes = ["/login"];
   const shouldUsePeerContext = !excludePeerRoutes.includes(location.pathname);
 
-  return shouldUsePeerContext ? (
-    <PeerProvider>
-      {showNavbar && <Navbar />}
-      <Outlet />
-    </PeerProvider>
-  ) : (
-    <>
-      {showNavbar && <Navbar />}
-      <Outlet />
-    </>
+  return (
+    <div className="font-kanit">
+      {shouldUsePeerContext ? (
+        <PeerProvider>
+          {showNavbar && <Navbar />}
+          <Outlet />
+        </PeerProvider>
+      ) : (
+        <>
+          {showNavbar && <Navbar />}
+          <Outlet />
+        </>
+      )}
+    </div>
   );
 };
 
